@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍷 OpenClaw Mini-Apps</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0a0e17; color: #e8e0d6; min-height: 100vh; padding: 2rem; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    p.sub { color: #8a7e72; margin-bottom: 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
+    .card { background: #151a26; border: 1px solid #2a2535; border-radius: 12px; overflow: hidden; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-4px); border-color: #C8963E; }
+    .card img { width: 100%; height: 160px; object-fit: cover; }
+    .card-body { padding: 1rem; }
+    .card h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+    .card p { font-size: 0.85rem; color: #8a7e72; }
+    .card .date { font-size: 0.75rem; color: #6a5e52; margin-top: 0.5rem; }
+    .badge { display: inline-block; background: #C8963E; color: #0a0e17; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    footer { margin-top: 3rem; text-align: center; color: #4a3e32; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <h1>🍷 OpenClaw Mini-Apps</h1>
+  <p class="sub">Experimental AI-built mini-apps for the wine industry</p>
+  <div class="grid">
+    <a class="card" href="apps/2026-04-15-global-wine-trade-flow-tracker/">
+      <img src="apps/2026-04-15-global-wine-trade-flow-tracker/hero.png" alt="Global Wine Trade Flow Tracker">
+      <div class="card-body">
+        <h3>Global Wine Trade Flow Tracker</h3>
+        <p>Interactive world map with bilateral trade flows, multi-year data (2000–2024), Robinson projection</p>
+        <span class="badge">Wine Trade</span>
+        <div class="date">Apr 15, 2026</div>
+      </div>
+    </a>
+  </div>
+  <footer>Built with <a href="https://github.com/openclaw/openclaw" style="color:#C8963E;">OpenClaw AI</a> · Not professionally validated</footer>
+</body>
+</html>
