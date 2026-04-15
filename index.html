@@ -7,35 +7,106 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #0a0e17; color: #e8e0d6; min-height: 100vh; padding: 2rem; }
-    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-    p.sub { color: #8a7e72; margin-bottom: 2rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
-    .card { background: #151a26; border: 1px solid #2a2535; border-radius: 12px; overflow: hidden; transition: transform 0.2s; }
-    .card:hover { transform: translateY(-4px); border-color: #C8963E; }
-    .card img { width: 100%; height: 160px; object-fit: cover; }
-    .card-body { padding: 1rem; }
-    .card h3 { font-size: 1rem; margin-bottom: 0.3rem; }
-    .card p { font-size: 0.85rem; color: #8a7e72; }
-    .card .date { font-size: 0.75rem; color: #6a5e52; margin-top: 0.5rem; }
-    .badge { display: inline-block; background: #C8963E; color: #0a0e17; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
-    footer { margin-top: 3rem; text-align: center; color: #4a3e32; font-size: 0.8rem; }
+    body { font-family: 'Inter', sans-serif; background: #0a0e17; color: #e8e0d6; min-height: 100vh; padding: 2rem; max-width: 960px; margin: 0 auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+    p.sub { color: #8a7e72; margin-bottom: 2rem; font-size: 0.95rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1rem; }
+    .card { background: #151a26; border: 1px solid #2a2535; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.15s, border-color 0.15s; display: block; }
+    .card:hover { transform: translateY(-3px); border-color: #C8963E; }
+    .card img { width: 100%; height: 140px; object-fit: cover; background: #1a1f2e; }
+    .card-body { padding: 0.8rem 1rem; }
+    .card h3 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .card .date { font-size: 0.7rem; color: #5a4e42; }
+    .card .badge { display: inline-block; background: #C8963E22; color: #C8963E; padding: 1px 6px; border-radius: 3px; font-size: 0.65rem; font-weight: 600; margin-top: 0.3rem; }
+    .no-img { height: 140px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: linear-gradient(135deg, #151a26, #1a2030); }
+    footer { margin-top: 3rem; text-align: center; color: #3a3228; font-size: 0.75rem; padding-bottom: 2rem; }
   </style>
 </head>
 <body>
   <h1>🍷 OpenClaw Mini-Apps</h1>
-  <p class="sub">Experimental AI-built mini-apps for the wine industry</p>
+  <p class="sub">Experimental AI-built mini-apps for the wine industry · Not professionally validated</p>
   <div class="grid">
     <a class="card" href="apps/2026-04-15-global-wine-trade-flow-tracker/">
-      <img src="apps/2026-04-15-global-wine-trade-flow-tracker/hero.png" alt="Global Wine Trade Flow Tracker">
-      <div class="card-body">
-        <h3>Global Wine Trade Flow Tracker</h3>
-        <p>Interactive world map with bilateral trade flows, multi-year data (2000–2024), Robinson projection</p>
-        <span class="badge">Wine Trade</span>
-        <div class="date">Apr 15, 2026</div>
-      </div>
+      <img src="apps/2026-04-15-global-wine-trade-flow-tracker/hero.png" alt="Global Wine Trade Flows">
+      <div class="card-body"><h3>Global Wine Trade Flow Tracker</h3><div class="date">Apr 15</div><span class="badge">Wine Trade</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-14/">
+      <div class="no-img">🕰️</div>
+      <div class="card-body"><h3>Vintage Time Machine — Australian Wine Explorer</h3><div class="date">Apr 14</div><span class="badge">Wine History</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-13/">
+      <div class="no-img">🧪</div>
+      <div class="card-body"><h3>Fermentation Drama</h3><div class="date">Apr 13</div><span class="badge">Simulation</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-12/">
+      <div class="no-img">🌿</div>
+      <div class="card-body"><h3>Vineyard Scout Sprint</h3><div class="date">Apr 12</div><span class="badge">Viticulture</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-11/">
+      <div class="no-img">♻️</div>
+      <div class="card-body"><h3>Winery Waste-to-Value Studio</h3><div class="date">Apr 11</div><span class="badge">Engineering</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-10/">
+      <div class="no-img">☀️</div>
+      <div class="card-body"><h3>Vineyard Sun Compass</h3><div class="date">Apr 10</div><span class="badge">Viticulture</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-09/">
+      <div class="no-img">💧</div>
+      <div class="card-body"><h3>Vineyard Irrigation Bucket Coach</h3><div class="date">Apr 9</div><span class="badge">Viticulture</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-07/">
+      <div class="no-img">⚡</div>
+      <div class="card-body"><h3>Winery Oxygen Risk Map</h3><div class="date">Apr 7</div><span class="badge">Winery</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-05/">
+      <div class="no-img">🍄</div>
+      <div class="card-body"><h3>Vineyard Mildew Pressure Playbook</h3><div class="date">Apr 5</div><span class="badge">Viticulture</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-04/">
+      <div class="no-img">❄️</div>
+      <div class="card-body"><h3>Vineyard Frost Pocket Explorer</h3><div class="date">Apr 4</div><span class="badge">Viticulture</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-03/">
+      <div class="no-img">🗺️</div>
+      <div class="card-body"><h3>Winery Timewalk Atlas</h3><div class="date">Apr 3</div><span class="badge">Wine History</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-02/">
+      <div class="no-img">🧫</div>
+      <div class="card-body"><h3>Cellar Experiment Deck</h3><div class="date">Apr 2</div><span class="badge">Winery</span></div>
+    </a>
+    <a class="card" href="apps/2026-04-01/">
+      <div class="no-img">🌊</div>
+      <div class="card-body"><h3>Cellar Cascade Playground</h3><div class="date">Apr 1</div><span class="badge">Winery</span></div>
+    </a>
+    <a class="card" href="apps/2026-03-31/">
+      <div class="no-img">📋</div>
+      <div class="card-body"><h3>Vintage Ops Whiteboard</h3><div class="date">Mar 31</div><span class="badge">Winery</span></div>
+    </a>
+    <a class="card" href="apps/2026-03-30/">
+      <div class="no-img">🏥</div>
+      <div class="card-body"><h3>Cellar Shift Triage Trainer</h3><div class="date">Mar 30</div><span class="badge">Winery</span></div>
+    </a>
+    <a class="card" href="apps/2026-03-29/">
+      <div class="no-img">⏳</div>
+      <div class="card-body"><h3>Winery Technology Time Machine</h3><div class="date">Mar 29</div><span class="badge">Wine History</span></div>
+    </a>
+    <a class="card" href="apps/2026-03-27/">
+      <div class="no-img">❄️</div>
+      <div class="card-body"><h3>Wine Cooling & Chilling Load Explorer</h3><div class="date">Mar 27</div><span class="badge">Engineering</span></div>
+    </a>
+    <a class="card" href="apps/2026-03-26/">
+      <div class="no-img">🔧</div>
+      <div class="card-body"><h3>Winery Hose & Pump Explorer</h3><div class="date">Mar 26</div><span class="badge">Engineering</span></div>
+    </a>
+    <a class="card" href="apps/2026-03-25/">
+      <div class="no-img">🧪</div>
+      <div class="card-body"><h3>Wine SO₂ Speciation Explorer</h3><div class="date">Mar 25</div><span class="badge">Chemistry</span></div>
+    </a>
+    <a class="card" href="apps/2026-03-24/">
+      <div class="no-img">🌡️</div>
+      <div class="card-body"><h3>Fermentation Heat Explorer</h3><div class="date">Mar 24</div><span class="badge">Simulation</span></div>
     </a>
   </div>
-  <footer>Built with <a href="https://github.com/openclaw/openclaw" style="color:#C8963E;">OpenClaw AI</a> · Not professionally validated</footer>
+  <footer>Built with <a href="https://github.com/openclaw/openclaw" style="color:#C8963E;">OpenClaw AI</a></footer>
 </body>
 </html>
