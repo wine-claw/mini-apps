@@ -622,6 +622,9 @@
   </div>
 </div>
 
+<!-- TopoJSON for country outlines -->
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+
 <script>
 const EVENTS = [
   { year: 1854, lat: 38, lon: -77, region: "Eastern North America", title: "Native Habitat", desc: "Phylloxera (Daktulosphaira vitifoliae) is native to eastern North America, where Vitis labrusca and other species evolved resistance. The tiny aphid-like insect feeds on vine roots, causing galls and ultimately killing European vines.", type: "origin" },
@@ -657,38 +660,95 @@ const COLORS = {
   mild: '#3498db'
 };
 
-// Map projection
-const CANVAS_LAT = 30; // center latitude
-const CANVAS_LON = 10; // center longitude
-const CANVAS_W = 900;
-const CANVAS_H = 500;
-
-// Simplified continent paths (lon, lat bounding boxes)
-const CONTINENTS = [
-  // North America
-  { name: 'na', path: [[-170,70],[-50,70],[-60,25],[-130,15],[-170,60]] },
-  // South America
-  { name: 'sa', path: [[-82,12],[-34,2],[-50,-55],[-82,5]] },
-  // Europe
-  { name: 'eu', path: [[-10,70],[40,70],[40,35],[0,35],[-10,45]] },
-  // Africa
-  { name: 'af', path: [[-18,35],[55,35],[55,-35],[-18,-35]] },
-  // Asia
-  { name: 'as', path: [[40,70],[180,70],[180,5],[40,5]] },
-  // Australia
-  { name: 'au', path: [[110,-10],[155,-10],[155,-45],[110,-45]] },
+// Wine-relevant country names for highlighting
+const WINE_COUNTRIES = [
+  'United States of America', 'France', 'Spain', 'Portugal', 'Italy',
+  'Germany', 'Austria', 'Switzerland', 'Australia', 'South Africa',
+  'New Zealand', 'Argentina', 'Chile', 'United Kingdom'
 ];
 
+// Map projection — equirectangular, full world
+const PROJ_LON_MIN = -180;
+const PROJ_LON_MAX = 180;
+const PROJ_LAT_MIN = -85;
+const PROJ_LAT_MAX = 85;
+
+let projW = 900;
+let projH = 500;
+
 function project(lat, lon) {
-  const x = ((lon - CANVAS_LON) / 360) * CANVAS_W + CANVAS_W / 2;
-  const y = ((CANVAS_LAT - lat) / 180) * CANVAS_H;
+  const x = ((lon - PROJ_LON_MIN) / (PROJ_LON_MAX - PROJ_LON_MIN)) * projW;
+  const y = ((PROJ_LAT_MAX - lat) / (PROJ_LAT_MAX - PROJ_LAT_MIN)) * projH;
   return { x, y };
 }
 
-function reverseProject(x, y) {
-  const lon = ((x - CANVAS_W / 2) / CANVAS_W) * 360 + CANVAS_LON;
-  const lat = CANVAS_LAT - (y / CANVAS_H) * 180;
-  return { lat, lon };
+// Country Path2D cache
+let countryPaths = [];
+let wineCountrySet = new Set();
+
+function geoToCanvasPath(feature) {
+  const path = new Path2D();
+  const geom = feature.geometry;
+  if (!geom) return path;
+
+  const processCoords = (coords) => {
+    for (let i = 0; i < coords.length; i++) {
+      const [lon, lat] = coords[i];
+      const p = project(lat, lon);
+      if (i === 0) {
+        path.moveTo(p.x, p.y);
+      } else {
+        path.lineTo(p.x, p.y);
+      }
+    }
+  };
+
+  if (geom.type === 'Polygon') {
+    geom.coordinates.forEach(ring => {
+      processCoords(ring);
+      path.closePath();
+    });
+  } else if (geom.type === 'MultiPolygon') {
+    geom.coordinates.forEach(poly =>
+      poly.forEach(ring => {
+        processCoords(ring);
+        path.closePath();
+      })
+    );
+  }
+  return path;
+}
+
+function buildCountryPaths(worldData) {
+  countryPaths = [];
+  wineCountrySet = new Set();
+
+  const features = topojson.feature(worldData, worldData.objects.countries).features;
+
+  features.forEach(feature => {
+    const name = feature.properties && feature.properties.name;
+    const isWine = name && WINE_COUNTRIES.some(wc =>
+      name.toLowerCase().includes(wc.toLowerCase())
+    );
+    if (isWine) wineCountrySet.add(name);
+
+    const path = geoToCanvasPath(feature);
+    countryPaths.push({ path, name, isWine });
+  });
+}
+
+let mapReady = false;
+
+async function loadWorldData() {
+  try {
+    const res = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+    const worldData = await res.json();
+    buildCountryPaths(worldData);
+    mapReady = true;
+  } catch (err) {
+    console.warn('Could not load world TopoJSON, falling back to simple map', err);
+    mapReady = true;
+  }
 }
 
 function drawMap(ctx, w, h) {
@@ -710,30 +770,22 @@ function drawMap(ctx, w, h) {
     ctx.stroke();
   }
   for (let lon = -180; lon <= 180; lon += 60) {
-    const p = project(0, lon);
-    const p2 = project(60, lon);
+    const p = project(-85, lon);
+    const p2 = project(85, lon);
     ctx.beginPath();
     ctx.moveTo(p.x, 0);
     ctx.lineTo(p2.x, h);
     ctx.stroke();
   }
 
-  // Draw continents
-  ctx.fillStyle = '#2a3a4a';
-  ctx.strokeStyle = '#3d4f5f';
-  ctx.lineWidth = 1;
-  CONTINENTS.forEach(c => {
-    if (c.path.length < 3) return;
-    ctx.beginPath();
-    const start = project(c.path[0][1], c.path[0][0]);
-    ctx.moveTo(start.x, start.y);
-    for (let i = 1; i < c.path.length; i++) {
-      const p = project(c.path[i][1], c.path[i][0]);
-      ctx.lineTo(p.x, p.y);
-    }
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+  // Draw countries
+  ctx.strokeStyle = 'rgba(61, 79, 95, 0.6)';
+  ctx.lineWidth = 0.5;
+
+  countryPaths.forEach(({ path, isWine }) => {
+    ctx.fillStyle = isWine ? '#3a4f5f' : '#2a3a4a';
+    ctx.fill(path);
+    ctx.stroke(path);
   });
 }
 
@@ -866,11 +918,17 @@ const ctx = canvas.getContext('2d');
 function resizeCanvas() {
   const container = canvas.parentElement;
   const dpr = window.devicePixelRatio || 1;
-  canvas.width = container.clientWidth * dpr;
-  canvas.height = container.clientHeight * dpr;
-  canvas.style.width = container.clientWidth + 'px';
-  canvas.style.height = container.clientHeight + 'px';
+  const cw = container.clientWidth;
+  const ch = container.clientHeight;
+  canvas.width = cw * dpr;
+  canvas.height = ch * dpr;
+  canvas.style.width = cw + 'px';
+  canvas.style.height = ch + 'px';
   ctx.scale(dpr, dpr);
+  projW = cw;
+  projH = ch;
+  // Rebuild paths at new scale
+  if (window._worldData) buildCountryPaths(window._worldData);
 }
 
 function updateVisibleEvents() {
@@ -968,9 +1026,24 @@ function resetTimeline() {
 }
 
 // Event listeners
-document.getElementById('startBtn').addEventListener('click', () => {
+document.getElementById('startBtn').addEventListener('click', async () => {
   document.getElementById('introScreen').classList.add('hidden');
   document.getElementById('mainApp').classList.add('visible');
+
+  // Load world data if not already loaded
+  if (!window._worldData) {
+    try {
+      const res = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+      const worldData = await res.json();
+      window._worldData = worldData;
+      buildCountryPaths(worldData);
+      mapReady = true;
+    } catch (err) {
+      console.warn('Could not load world TopoJSON', err);
+      mapReady = true;
+    }
+  }
+
   setTimeout(() => {
     resizeCanvas();
     updateVisibleEvents();
