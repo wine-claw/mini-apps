@@ -3,10 +3,10 @@
   "latestUrl": "https://wine-claw.github.io/mini-apps/latest/",
   "latest": {
     "date": "2026-04-17",
-    "title": "Rootstock Matchmaker",
-    "slug": "rootstock-matchmaker",
-    "publishedSlug": "2026-04-17-rootstock-matchmaker",
-    "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-17-rootstock-matchmaker/"
+    "title": "Wine Input Cost Index",
+    "slug": "wine-input-cost-index",
+    "publishedSlug": "2026-04-17-wine-input-cost-index",
+    "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-17-wine-input-cost-index/"
   },
   "apps": [
     {
@@ -15,6 +15,13 @@
       "slug": "rootstock-matchmaker",
       "publishedSlug": "2026-04-17-rootstock-matchmaker",
       "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-17-rootstock-matchmaker/"
+    },
+    {
+      "date": "2026-04-17",
+      "title": "Wine Input Cost Index",
+      "slug": "wine-input-cost-index",
+      "publishedSlug": "2026-04-17-wine-input-cost-index",
+      "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-17-wine-input-cost-index/"
     },
     {
       "date": "2026-04-16",
