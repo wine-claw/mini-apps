@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <title>Wine Input Cost Index</title>
+  <meta name="theme-color" content="#18070d" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --bg: #12050a;
+      --bg-elev: rgba(39, 12, 20, 0.9);
+      --bg-soft: rgba(73, 22, 35, 0.55);
+      --card: rgba(33, 10, 17, 0.92);
+      --border: rgba(226, 185, 106, 0.16);
+      --border-strong: rgba(226, 185, 106, 0.34);
+      --text: #f8f1eb;
+      --muted: #ceb6ae;
+      --gold: #e2b96a;
+      --gold-soft: #b48a40;
+      --berry: #7f223e;
+      --berry-bright: #a93055;
+      --green: #4dd08a;
+      --red: #ff6a78;
+      --amber: #ffc76b;
+      --shadow: 0 14px 42px rgba(0, 0, 0, 0.34);
+      --radius: 22px;
+      --radius-sm: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: radial-gradient(circle at top, #34101d 0%, #19070d 34%, #0d0306 100%); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { min-height: 100vh; }
+    button, input { font: inherit; }
+
+    .app {
+      width: min(100%, 760px);
+      margin: 0 auto;
+      padding: 18px 14px 36px;
+    }
+
+    .hero, .card {
+      background: linear-gradient(180deg, rgba(49, 16, 26, 0.96), rgba(25, 8, 14, 0.96));
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero {
+      padding: 20px 18px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -50px auto;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(226,185,106,0.22), transparent 66%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(226,185,106,0.09);
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 14px 0 8px;
+      font-size: clamp(29px, 6.6vw, 42px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+      max-width: 58ch;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .metric-tile {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: clamp(24px, 7vw, 38px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .delta.up { color: var(--red); background: rgba(255,106,120,0.13); }
+    .delta.down { color: var(--green); background: rgba(77,208,138,0.12); }
+    .delta.flat { color: var(--amber); background: rgba(255,199,107,0.11); }
+
+    .section {
+      margin-top: 14px;
+      padding: 16px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-header p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .index-panel {
+      padding: 14px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(127,34,62,0.22), rgba(40,13,22,0.55));
+      border: 1px solid rgba(226,185,106,0.16);
+    }
+
+    .index-chart-wrap { height: 220px; margin-top: 10px; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border-strong);
+      background: linear-gradient(180deg, rgba(226,185,106,0.16), rgba(226,185,106,0.08));
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 700;
+      min-height: 46px;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .weights-grid, .commodities-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .weight-card {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .weight-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .weight-card-title { font-weight: 700; }
+    .weight-value { color: var(--gold); font-weight: 800; }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--gold);
+    }
+
+    .helper-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .commodity-card {
+      padding: 14px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .commodity-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .commodity-head h3 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+    }
+
+    .commodity-sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .mini-metrics {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .mini-metric {
+      padding: 7px 9px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .mini-metric strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .chart-wrap { height: 116px; }
+
+    .footer-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .source-chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .source-chip {
+      font-size: 11px;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    @media (min-width: 700px) {
+      .summary-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .weights-grid, .commodities-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .app { padding: 22px 18px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="snapshot-root">
+    <section class="hero">
+      <div class="eyebrow">Wine sector budgeting signal</div>
+      <h1>Wine Input Cost Index</h1>
+      <p>Mobile-first composite of major winery input costs, built from embedded historical monthly series across fertiliser, fuel, chemicals, packaging, water, labour, and energy.</p>
+      <div class="summary-grid">
+        <div class="metric-tile">
+          <div class="label">Composite index</div>
+          <div class="metric-value" id="compositeIndexValue">100.0</div>
+          <div class="delta flat" id="compositeMoM">MoM 0.0%</div>
+        </div>
+        <div class="metric-tile">
+          <div class="label">Year-on-year</div>
+          <div class="metric-value" id="compositeYoYValue">0.0%</div>
+          <div class="delta flat" id="compositeYoY">YoY 0.0%</div>
+        </div>
+        <div class="metric-tile">
+          <div class="label">Latest month</div>
+          <div class="metric-value" id="latestMonthLabel">-</div>
+          <div class="delta flat" id="trackedSeriesCount">0 tracked series</div>
+        </div>
+        <div class="metric-tile">
+          <div class="label">Style profile</div>
+          <div class="metric-value" id="profileName">Balanced</div>
+          <div class="delta flat" id="weightSumIndicator">Weights sum to 100%</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-header">
+        <div>
+          <h2>Composite winery index</h2>
+          <p>Index base = first month in the series, rescaled to 100.</p>
+        </div>
+      </div>
+      <div class="index-panel">
+        <div class="index-chart-wrap"><canvas id="indexChart"></canvas></div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="exportPngBtn">Download PNG snapshot</button>
+        <button class="btn secondary" id="copySummaryBtn">Copy share summary</button>
+        <button class="btn secondary" id="resetWeightsBtn">Reset balanced weights</button>
+      </div>
+      <div class="footer-note" id="shareSummaryPreview"></div>
+    </section>
+
+    <section class="card section">
+      <div class="section-header">
+        <div>
+          <h2>Adjust category weights</h2>
+          <p>Tune cost exposure to reflect sparkling, premium still, or bulk production structures.</p>
+        </div>
+      </div>
+      <div class="weights-grid" id="weightsGrid"></div>
+    </section>
+
+    <section class="card section">
+      <div class="section-header">
+        <div>
+          <h2>Commodity trend cards</h2>
+          <p>Realistic embedded monthly back-data, roughly aligned to World Bank, FRED, ABS, AEMO, Murray-Darling, and trade price ranges.</p>
+        </div>
+      </div>
+      <div class="commodities-grid" id="commoditiesGrid"></div>
+      <div class="source-chip-wrap">
+        <span class="source-chip">Fertiliser: World Bank / Index Mundi approximate monthly ranges</span>
+        <span class="source-chip">Fuel: FRED / AU retail diesel trend proxy</span>
+        <span class="source-chip">Chemicals: industry spot range approximations</span>
+        <span class="source-chip">Water: Murray-Darling allocation trade trend proxy</span>
+        <span class="source-chip">Labour: ABS wage price index trend approximation</span>
+        <span class="source-chip">Energy: AEMO wholesale / business power trend proxy</span>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const months = [
+      '2023-11','2023-12','2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10',
+      '2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10',
+      '2025-11','2025-12','2026-01','2026-02','2026-03','2026-04'
+    ];
+
+    const dataSeries = [
+      {
+        key: 'fertiliser',
+        name: 'Fertiliser',
+        unit: 'US$/t blended proxy',
+        category: 'Nutrient input',
+        description: 'Average of DAP and urea benchmarks, reflecting global fertiliser reset then stabilisation.',
+        color: '#f3c96b',
+        weight: 15,
+        series: [520,505,495,485,478,470,462,455,448,444,439,435,432,430,428,426,424,423,421,420,418,416,414,412,410,409,408,406,405,404]
+      },
+      {
+        key: 'fuel',
+        name: 'Fuel',
+        unit: 'A$/L diesel proxy',
+        category: 'Diesel and logistics',
+        description: 'Diesel cost proxy for vineyard operations, freight, and winery logistics.',
+        color: '#ff8b5e',
+        weight: 14,
+        series: [2.08,2.02,1.98,1.94,1.91,1.89,1.87,1.86,1.85,1.87,1.89,1.92,1.95,1.97,1.99,2.01,2.04,2.06,2.08,2.10,2.11,2.13,2.14,2.15,2.16,2.17,2.18,2.19,2.20,2.21]
+      },
+      {
+        key: 'chemicals',
+        name: 'Chemicals',
+        unit: 'A$/t blended proxy',
+        category: 'Tartaric acid + SO₂',
+        description: 'Weighted winery chemical basket combining tartaric acid and sulphur dioxide supply costs.',
+        color: '#b28cff',
+        weight: 13,
+        series: [3420,3380,3340,3300,3270,3230,3200,3180,3160,3140,3130,3120,3110,3100,3090,3095,3105,3120,3140,3155,3175,3190,3205,3220,3235,3250,3265,3280,3295,3310]
+      },
+      {
+        key: 'packaging',
+        name: 'Packaging',
+        unit: 'A$/1,000 unit basket',
+        category: 'Glass + cork + screwcap',
+        description: 'Packaging basket proxy capturing imported glass, cork, and closure costs.',
+        color: '#7ad6c2',
+        weight: 18,
+        series: [760,754,748,743,739,734,730,727,724,722,720,718,716,715,714,713,714,715,717,719,721,723,726,728,731,734,737,740,742,745]
+      },
+      {
+        key: 'water',
+        name: 'Water',
+        unit: 'A$/ML allocation proxy',
+        category: 'Murray-Darling water',
+        description: 'Temporary water allocation trade proxy, reflecting irrigation market tightening.',
+        color: '#5db0ff',
+        weight: 10,
+        series: [165,160,155,150,148,145,142,140,138,136,135,138,142,148,155,164,172,185,198,214,228,243,258,272,286,298,308,318,327,335]
+      },
+      {
+        key: 'labour',
+        name: 'Labour',
+        unit: 'ABS wage index proxy',
+        category: 'Winery and vineyard labour',
+        description: 'ABS-style wage growth proxy for production, logistics, and agricultural labour.',
+        color: '#f08cc0',
+        weight: 16,
+        series: [119.4,119.8,120.2,120.5,120.9,121.3,121.6,122.0,122.4,122.8,123.1,123.5,123.9,124.3,124.7,125.1,125.4,125.8,126.2,126.6,127.0,127.4,127.8,128.2,128.6,129.0,129.4,129.8,130.2,130.6]
+      },
+      {
+        key: 'energy',
+        name: 'Energy',
+        unit: 'A$/MWh proxy',
+        category: 'Electricity',
+        description: 'AEMO and business tariff proxy for winery electricity exposure.',
+        color: '#ffd166',
+        weight: 14,
+        series: [138,134,130,126,122,118,116,114,112,111,110,112,115,118,122,126,131,136,141,147,152,158,163,168,171,174,176,178,180,182]
+      }
+    ];
+
+    const balancedWeights = Object.fromEntries(dataSeries.map(item => [item.key, item.weight]));
+    const profilePresets = {
+      Balanced: balancedWeights,
+      Sparkling: { fertiliser: 12, fuel: 12, chemicals: 15, packaging: 25, water: 8, labour: 14, energy: 14 },
+      Bulk: { fertiliser: 18, fuel: 16, chemicals: 12, packaging: 14, water: 14, labour: 14, energy: 12 },
+      Premium: { fertiliser: 13, fuel: 12, chemicals: 13, packaging: 20, water: 8, labour: 20, energy: 14 }
+    };
+
+    const state = {
+      weights: { ...balancedWeights },
+      charts: {},
+      indexChart: null,
+      currentProfile: 'Balanced'
+    };
+
+    const fmt = {
+      monthLabel: iso => new Date(iso + '-01T00:00:00').toLocaleDateString('en-AU', { month: 'short', year: 'numeric' }),
+      number: n => Number(n).toLocaleString('en-AU', { maximumFractionDigits: 1, minimumFractionDigits: 1 }),
+      compact: n => Number(n).toLocaleString('en-AU', { maximumFractionDigits: 0 }),
+      change: n => `${n >= 0 ? '+' : ''}${n.toFixed(1)}%`
+    };
+
+    function percentChange(current, previous) {
+      if (!previous || previous === 0) return 0;
+      return ((current - previous) / previous) * 100;
+    }
+
+    function trendClass(value) {
+      if (value > 0.15) return 'up';
+      if (value < -0.15) return 'down';
+      return 'flat';
+    }
+
+    function normalizeWeights(weights) {
+      const sum = Object.values(weights).reduce((acc, value) => acc + Number(value || 0), 0) || 1;
+      const normalized = {};
+      for (const [key, value] of Object.entries(weights)) normalized[key] = Number(value) / sum;
+      return { normalized, sum };
+    }
+
+    function seriesToIndex(series) {
+      const base = series[0];
+      return series.map(value => (value / base) * 100);
+    }
+
+    function computeComposite() {
+      const indexed = Object.fromEntries(dataSeries.map(item => [item.key, seriesToIndex(item.series)]));
+      const { normalized, sum } = normalizeWeights(state.weights);
+      const composite = months.map((_, idx) => {
+        return dataSeries.reduce((acc, item) => acc + indexed[item.key][idx] * normalized[item.key], 0);
+      });
+      return { composite, weightSum: sum, indexed };
+    }
+
+    function latestSummary() {
+      const { composite, weightSum } = computeComposite();
+      const latest = composite[composite.length - 1];
+      const prev = composite[composite.length - 2];
+      const yoy = composite[composite.length - 13];
+      return {
+        composite,
+        weightSum,
+        latest,
+        mom: percentChange(latest, prev),
+        yoy: percentChange(latest, yoy)
+      };
+    }
+
+    function setDelta(el, label, value) {
+      el.className = `delta ${trendClass(value)}`;
+      el.textContent = `${label} ${fmt.change(value)}`;
+    }
+
+    function buildWeightControls() {
+      const grid = document.getElementById('weightsGrid');
+      grid.innerHTML = dataSeries.map(item => `
+        <div class="weight-card">
+          <div class="weight-card-top">
+            <div>
+              <div class="weight-card-title">${item.name}</div>
+              <div class="commodity-sub">${item.category}</div>
+            </div>
+            <div class="weight-value" id="weight-${item.key}">${state.weights[item.key]}%</div>
+          </div>
+          <input type="range" min="0" max="40" step="1" value="${state.weights[item.key]}" data-key="${item.key}" />
+          <div class="helper-row">
+            <span>${item.unit}</span>
+            <span>${item.description}</span>
+          </div>
+        </div>
+      `).join('');
+
+      grid.querySelectorAll('input[type="range"]').forEach(input => {
+        input.addEventListener('input', event => {
+          const key = event.target.dataset.key;
+          state.weights[key] = Number(event.target.value);
+          state.currentProfile = 'Custom';
+          render();
+        });
+      });
+    }
+
+    function buildCommodityCards() {
+      const grid = document.getElementById('commoditiesGrid');
+      grid.innerHTML = dataSeries.map(item => {
+        const latest = item.series[item.series.length - 1];
+        const mom = percentChange(latest, item.series[item.series.length - 2]);
+        const yoy = percentChange(latest, item.series[item.series.length - 13]);
+        return `
+          <article class="commodity-card">
+            <div class="commodity-head">
+              <div>
+                <h3>${item.name}</h3>
+                <div class="commodity-sub">${item.category} • ${item.unit}</div>
+              </div>
+              <div class="mini-metrics">
+                <div class="mini-metric">Latest<strong>${fmt.number(latest)}</strong></div>
+                <div class="mini-metric">MoM<strong style="color:${mom > 0.15 ? 'var(--red)' : mom < -0.15 ? 'var(--green)' : 'var(--amber)'}">${fmt.change(mom)}</strong></div>
+                <div class="mini-metric">YoY<strong style="color:${yoy > 0.15 ? 'var(--red)' : yoy < -0.15 ? 'var(--green)' : 'var(--amber)'}">${fmt.change(yoy)}</strong></div>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="chart-${item.key}"></canvas></div>
+            <div class="footer-note">${item.description}</div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderCommodityCharts() {
+      dataSeries.forEach(item => {
+        const canvas = document.getElementById(`chart-${item.key}`);
+        if (state.charts[item.key]) state.charts[item.key].destroy();
+        state.charts[item.key] = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels: months.map(fmt.monthLabel),
+            datasets: [{
+              data: item.series,
+              borderColor: item.color,
+              backgroundColor: item.color + '22',
+              borderWidth: 2.4,
+              pointRadius: 0,
+              pointHitRadius: 14,
+              fill: true,
+              tension: 0.32
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: 'rgba(18,5,10,0.96)',
+                borderColor: 'rgba(226,185,106,0.24)',
+                borderWidth: 1,
+                titleColor: '#f8f1eb',
+                bodyColor: '#f8f1eb',
+                displayColors: false,
+                callbacks: {
+                  label: ctx => `${item.name}: ${fmt.number(ctx.parsed.y)} ${item.unit}`
+                }
+              }
+            },
+            scales: {
+              x: { display: false },
+              y: { display: false }
+            }
+          }
+        });
+      });
+    }
+
+    function renderIndexChart(composite) {
+      const canvas = document.getElementById('indexChart');
+      if (state.indexChart) state.indexChart.destroy();
+      state.indexChart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: months.map(fmt.monthLabel),
+          datasets: [{
+            label: 'Winery Input Cost Index',
+            data: composite,
+            borderColor: '#e2b96a',
+            backgroundColor: 'rgba(226,185,106,0.16)',
+            fill: true,
+            borderWidth: 3,
+            pointRadius: 0,
+            pointHitRadius: 18,
+            tension: 0.34
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { intersect: false, mode: 'index' },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(18,5,10,0.96)',
+              borderColor: 'rgba(226,185,106,0.25)',
+              borderWidth: 1,
+              titleColor: '#f8f1eb',
+              bodyColor: '#f8f1eb',
+              displayColors: false,
+              callbacks: {
+                label: ctx => `Index ${ctx.parsed.y.toFixed(1)}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: 'rgba(248,241,235,0.64)', maxTicksLimit: 6 },
+              grid: { display: false }
+            },
+            y: {
+              ticks: { color: 'rgba(248,241,235,0.64)' },
+              grid: { color: 'rgba(255,255,255,0.06)' }
+            }
+          }
+        }
+      });
+    }
+
+    function updateSummary() {
+      const { composite, latest, mom, yoy, weightSum } = latestSummary();
+      document.getElementById('compositeIndexValue').textContent = latest.toFixed(1);
+      document.getElementById('compositeYoYValue').textContent = fmt.change(yoy);
+      document.getElementById('latestMonthLabel').textContent = fmt.monthLabel(months[months.length - 1]);
+      document.getElementById('trackedSeriesCount').textContent = `${dataSeries.length} tracked series`;
+      document.getElementById('profileName').textContent = state.currentProfile;
+      document.getElementById('weightSumIndicator').textContent = `Weights sum to ${Math.round(weightSum)}%`;
+      document.getElementById('shareSummaryPreview').textContent = buildShareSummary();
+      setDelta(document.getElementById('compositeMoM'), 'MoM', mom);
+      setDelta(document.getElementById('compositeYoY'), 'YoY', yoy);
+      renderIndexChart(composite);
+    }
+
+    function buildShareSummary() {
+      const { latest, mom, yoy } = latestSummary();
+      const leaders = [...dataSeries]
+        .map(item => ({ item, yoy: percentChange(item.series[item.series.length - 1], item.series[item.series.length - 13]) }))
+        .sort((a, b) => b.yoy - a.yoy)
+        .slice(0, 3)
+        .map(entry => `${entry.item.name} ${fmt.change(entry.yoy)}`)
+        .join(', ');
+      return `Wine Input Cost Index ${latest.toFixed(1)} for ${fmt.monthLabel(months.at(-1))}. MoM ${fmt.change(mom)}, YoY ${fmt.change(yoy)}. Biggest annual pressure points: ${leaders}. Profile: ${state.currentProfile}.`;
+    }
+
+    function applyPreset(name) {
+      state.weights = { ...profilePresets[name] };
+      state.currentProfile = name;
+      buildWeightControls();
+      render();
+    }
+
+    async function exportSnapshot() {
+      const root = document.getElementById('snapshot-root');
+      const canvas = await html2canvas(root, { backgroundColor: '#12050a', scale: 2, useCORS: true });
+      const link = document.createElement('a');
+      link.download = 'wine-input-cost-index.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    async function copySummary() {
+      const text = buildShareSummary();
+      try {
+        await navigator.clipboard.writeText(text);
+        const btn = document.getElementById('copySummaryBtn');
+        const old = btn.textContent;
+        btn.textContent = 'Summary copied';
+        setTimeout(() => btn.textContent = old, 1400);
+      } catch {
+        window.prompt('Copy summary:', text);
+      }
+    }
+
+    function render() {
+      dataSeries.forEach(item => {
+        const valueEl = document.getElementById(`weight-${item.key}`);
+        if (valueEl) valueEl.textContent = `${state.weights[item.key]}%`;
+      });
+      updateSummary();
+      renderCommodityCharts();
+    }
+
+    function initActions() {
+      document.getElementById('exportPngBtn').addEventListener('click', exportSnapshot);
+      document.getElementById('copySummaryBtn').addEventListener('click', copySummary);
+      document.getElementById('resetWeightsBtn').addEventListener('click', () => applyPreset('Balanced'));
+
+      const presetRow = document.createElement('div');
+      presetRow.className = 'actions';
+      presetRow.innerHTML = Object.keys(profilePresets).map(name => `<button class="btn secondary preset-btn" data-preset="${name}">${name}</button>`).join('');
+      document.querySelectorAll('.section')[1].insertBefore(presetRow, document.getElementById('weightsGrid'));
+      presetRow.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', event => applyPreset(event.target.dataset.preset));
+      });
+    }
+
+    buildWeightControls();
+    buildCommodityCards();
+    initActions();
+    render();
+  </script>
+</body>
+</html>
