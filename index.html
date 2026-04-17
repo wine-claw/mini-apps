@@ -1,120 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🍷 OpenClaw Mini-Apps</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
+  <title>Wine Claw Mini Apps</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #0a0e17; color: #e8e0d6; min-height: 100vh; padding: 2rem; max-width: 960px; margin: 0 auto; }
-    h1 { font-size: 1.8rem; margin-bottom: 0.3rem; }
-    p.sub { color: #8a7e72; margin-bottom: 2rem; font-size: 0.95rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1rem; }
-    .card { background: #151a26; border: 1px solid #2a2535; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.15s, border-color 0.15s; display: block; }
-    .card:hover { transform: translateY(-3px); border-color: #C8963E; }
-    .card img { width: 100%; height: 140px; object-fit: cover; background: #1a1f2e; }
-    .card-body { padding: 0.8rem 1rem; }
-    .card h3 { font-size: 0.95rem; margin-bottom: 0.2rem; }
-    .card .date { font-size: 0.7rem; color: #5a4e42; }
-    .card .badge { display: inline-block; background: #C8963E22; color: #C8963E; padding: 1px 6px; border-radius: 3px; font-size: 0.65rem; font-weight: 600; margin-top: 0.3rem; }
-    .no-img { height: 140px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: linear-gradient(135deg, #151a26, #1a2030); }
-    footer { margin-top: 3rem; text-align: center; color: #3a3228; font-size: 0.75rem; padding-bottom: 2rem; }
+    :root { color-scheme: dark; --bg:#120c12; --panel:#1b1320; --text:#f5eef6; --muted:#c9b6cb; --accent:#d16ba5; --accent2:#7f5af0; --line:#34253a; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Text', Inter, sans-serif; background:linear-gradient(180deg,#100810,#1b1120); color:var(--text); }
+    .wrap { max-width:900px; margin:0 auto; padding:20px 16px 48px; }
+    h1 { font-size:1.9rem; line-height:1.1; margin:0 0 10px; }
+    p { color:var(--muted); line-height:1.45; }
+    .hero, .card { background:rgba(27,19,32,.92); border:1px solid var(--line); border-radius:18px; padding:18px; box-shadow:0 8px 28px rgba(0,0,0,.24); }
+    .hero { margin-bottom:18px; }
+    .warning { margin-bottom:14px; padding:12px 14px; border-radius:14px; background:#3a2319; border:1px solid #8b4d33; color:#ffd9c8; font-weight:600; line-height:1.4; }
+    .grid { display:grid; gap:14px; }
+    .button { display:inline-block; padding:12px 16px; border-radius:12px; text-decoration:none; font-weight:700; }
+    .primary { background:linear-gradient(90deg,var(--accent2),var(--accent)); color:white; }
+    .secondary { background:#261a2b; color:var(--text); border:1px solid var(--line); }
+    .meta { color:#e6a6c8; font-size:.9rem; margin-bottom:8px; }
+    h2 { margin:0 0 12px; font-size:1.25rem; line-height:1.25; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin:12px 0; }
+    .url { color:#a993ad; font-size:.84rem; word-break:break-all; }
+    .badge { display:inline-block; margin-left:8px; padding:3px 8px; border-radius:999px; background:#3a2440; color:#ffd7eb; font-size:.72rem; vertical-align:middle; }
   </style>
 </head>
 <body>
-  <h1>🍷 OpenClaw Mini-Apps</h1>
-  <p class="sub">Experimental AI-built mini-apps for the wine industry · Not professionally validated</p>
-  <div class="grid">
-    <a class="card" href="apps/2026-04-16-winemaking-costs/">
-      <div class="no-img">📊</div>
-      <div class="card-body"><h3>Winemaking Costs</h3><div class="date">Apr 16</div><span class="badge">Cost Breakdown</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-16-phylloxera-journey/">
-      <div class="no-img">🧫</div>
-      <div class="card-body"><h3>Phylloxera Journey</h3><div class="date">Apr 16</div><span class="badge">Wine History</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-15-global-wine-trade-flow-tracker/">
-      <img src="apps/2026-04-15-global-wine-trade-flow-tracker/hero.png" alt="Global Wine Trade Flows">
-      <div class="card-body"><h3>Global Wine Trade Flow Tracker</h3><div class="date">Apr 15</div><span class="badge">Wine Trade</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-14/">
-      <div class="no-img">🕰️</div>
-      <div class="card-body"><h3>Vintage Time Machine — Australian Wine Explorer</h3><div class="date">Apr 14</div><span class="badge">Wine History</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-13/">
-      <div class="no-img">🧪</div>
-      <div class="card-body"><h3>Fermentation Drama</h3><div class="date">Apr 13</div><span class="badge">Simulation</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-12/">
-      <div class="no-img">🌿</div>
-      <div class="card-body"><h3>Vineyard Scout Sprint</h3><div class="date">Apr 12</div><span class="badge">Viticulture</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-11/">
-      <div class="no-img">♻️</div>
-      <div class="card-body"><h3>Winery Waste-to-Value Studio</h3><div class="date">Apr 11</div><span class="badge">Engineering</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-10/">
-      <div class="no-img">☀️</div>
-      <div class="card-body"><h3>Vineyard Sun Compass</h3><div class="date">Apr 10</div><span class="badge">Viticulture</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-09/">
-      <div class="no-img">💧</div>
-      <div class="card-body"><h3>Vineyard Irrigation Bucket Coach</h3><div class="date">Apr 9</div><span class="badge">Viticulture</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-07/">
-      <div class="no-img">⚡</div>
-      <div class="card-body"><h3>Winery Oxygen Risk Map</h3><div class="date">Apr 7</div><span class="badge">Winery</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-05/">
-      <div class="no-img">🍄</div>
-      <div class="card-body"><h3>Vineyard Mildew Pressure Playbook</h3><div class="date">Apr 5</div><span class="badge">Viticulture</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-04/">
-      <div class="no-img">❄️</div>
-      <div class="card-body"><h3>Vineyard Frost Pocket Explorer</h3><div class="date">Apr 4</div><span class="badge">Viticulture</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-03/">
-      <div class="no-img">🗺️</div>
-      <div class="card-body"><h3>Winery Timewalk Atlas</h3><div class="date">Apr 3</div><span class="badge">Wine History</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-02/">
-      <div class="no-img">🧫</div>
-      <div class="card-body"><h3>Cellar Experiment Deck</h3><div class="date">Apr 2</div><span class="badge">Winery</span></div>
-    </a>
-    <a class="card" href="apps/2026-04-01/">
-      <div class="no-img">🌊</div>
-      <div class="card-body"><h3>Cellar Cascade Playground</h3><div class="date">Apr 1</div><span class="badge">Winery</span></div>
-    </a>
-    <a class="card" href="apps/2026-03-31/">
-      <div class="no-img">📋</div>
-      <div class="card-body"><h3>Vintage Ops Whiteboard</h3><div class="date">Mar 31</div><span class="badge">Winery</span></div>
-    </a>
-    <a class="card" href="apps/2026-03-30/">
-      <div class="no-img">🏥</div>
-      <div class="card-body"><h3>Cellar Shift Triage Trainer</h3><div class="date">Mar 30</div><span class="badge">Winery</span></div>
-    </a>
-    <a class="card" href="apps/2026-03-29/">
-      <div class="no-img">⏳</div>
-      <div class="card-body"><h3>Winery Technology Time Machine</h3><div class="date">Mar 29</div><span class="badge">Wine History</span></div>
-    </a>
-    <a class="card" href="apps/2026-03-27/">
-      <div class="no-img">❄️</div>
-      <div class="card-body"><h3>Wine Cooling & Chilling Load Explorer</h3><div class="date">Mar 27</div><span class="badge">Engineering</span></div>
-    </a>
-    <a class="card" href="apps/2026-03-26/">
-      <div class="no-img">🔧</div>
-      <div class="card-body"><h3>Winery Hose & Pump Explorer</h3><div class="date">Mar 26</div><span class="badge">Engineering</span></div>
-    </a>
-    <a class="card" href="apps/2026-03-25/">
-      <div class="no-img">🧪</div>
-      <div class="card-body"><h3>Wine SO₂ Speciation Explorer</h3><div class="date">Mar 25</div><span class="badge">Chemistry</span></div>
-    </a>
-    <a class="card" href="apps/2026-03-24/">
-      <div class="no-img">🌡️</div>
-      <div class="card-body"><h3>Fermentation Heat Explorer</h3><div class="date">Mar 24</div><span class="badge">Simulation</span></div>
-    </a>
+  <div class="wrap">
+    <section class="hero">
+      <div class="warning">Unlisted OpenClaw AI mini-apps. Experimental and not professionally validated. Do not rely on them for any decisions.</div>
+      <div class="meta">Phone-friendly mini-app gallery</div>
+      <h1>Wine Claw Mini Apps</h1>
+      <p>Unlisted remote access for the overnight mini-apps.</p>
+    </section>
+    <section class="grid">
+      
+        <article class="card">
+          <div class="meta">2026-04-17</div>
+          <h2>Rootstock Matchmaker <span class="badge">Latest</span></h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-17-rootstock-matchmaker/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-17-rootstock-matchmaker/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-16</div>
+          <h2>Phylloxera Journey </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-16-phylloxera-journey/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-16-phylloxera-journey/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-15</div>
+          <h2>Global Wine Trade Flow Tracker </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-15-global-wine-trade-flow-tracker/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-15-global-wine-trade-flow-tracker/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-14</div>
+          <h2>Vintage Time Machine </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-14-vintage-time-machine/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-14-vintage-time-machine/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-13</div>
+          <h2>Fermentation Drama </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-13-fermentation-drama/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-13-fermentation-drama/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-12</div>
+          <h2>Vineyard Scout Sprint </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-12-vineyard-scout-sprint/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-12-vineyard-scout-sprint/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-11</div>
+          <h2>Winery Waste To Value Studio </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-11-winery-waste-to-value-studio/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-11-winery-waste-to-value-studio/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-10</div>
+          <h2>Vineyard Sun Compass </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-10-vineyard-sun-compass/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-10-vineyard-sun-compass/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-09</div>
+          <h2>Vineyard Irrigation Bucket Coach </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-09-vineyard-irrigation-bucket-coach/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-09-vineyard-irrigation-bucket-coach/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-07</div>
+          <h2>Winery Oxygen Risk Map </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-07-winery-oxygen-risk-map/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-07-winery-oxygen-risk-map/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-05</div>
+          <h2>Vineyard Mildew Pressure Playbook </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-05-vineyard-mildew-pressure-playbook/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-05-vineyard-mildew-pressure-playbook/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-04</div>
+          <h2>Vineyard Frost Pocket Explorer </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-04-vineyard-frost-pocket-explorer/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-04-vineyard-frost-pocket-explorer/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-03</div>
+          <h2>Winery Timewalk Atlas </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-03-winery-timewalk-atlas/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-03-winery-timewalk-atlas/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-02</div>
+          <h2>Cellar Experiment Deck </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-02-cellar-experiment-deck/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-02-cellar-experiment-deck/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-04-01</div>
+          <h2>Cellar Cascade Playground </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-01-cellar-cascade-playground/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-04-01-cellar-cascade-playground/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-03-31</div>
+          <h2>Vintage Ops Whiteboard </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-31-vintage-ops-whiteboard/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-31-vintage-ops-whiteboard/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-03-30</div>
+          <h2>Cellar Shift Triage Trainer </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-30-cellar-shift-triage-trainer/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-30-cellar-shift-triage-trainer/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-03-29</div>
+          <h2>Winery Technology Time Machine </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-29-winery-technology-time-machine/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-29-winery-technology-time-machine/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-03-27</div>
+          <h2>Wine Cooling Load Explorer </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-27-wine-cooling-load-explorer/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-27-wine-cooling-load-explorer/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-03-26</div>
+          <h2>Winery Hose Pump Explorer </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-26-winery-hose-pump-explorer/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-26-winery-hose-pump-explorer/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-03-25</div>
+          <h2>So2 Speciation Explorer </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-25-so2-speciation-explorer/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-25-so2-speciation-explorer/</div>
+        </article>
+        
+        <article class="card">
+          <div class="meta">2026-03-24</div>
+          <h2>Fermentation Heat Explorer </h2>
+          <div class="actions">
+            <a class="button primary" href="https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-24-fermentation-heat-explorer/">Open app</a>
+          </div>
+          <div class="url">https://grapecrushrush.com/openclaw-mini-apps/apps/2026-03-24-fermentation-heat-explorer/</div>
+        </article>
+        
+    </section>
   </div>
-  <footer>Built with <a href="https://github.com/openclaw/openclaw" style="color:#C8963E;">OpenClaw AI</a></footer>
 </body>
 </html>
