@@ -2,13 +2,20 @@
   "publicBase": "https://wine-claw.github.io/mini-apps",
   "latestUrl": "https://wine-claw.github.io/mini-apps/latest/",
   "latest": {
-    "date": "2026-04-19",
-    "title": "Root Zone Explorer",
-    "slug": "root-zone-explorer",
-    "publishedSlug": "2026-04-19-root-zone-explorer",
-    "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-19-root-zone-explorer/"
+    "date": "2026-04-20",
+    "title": "Tank Chill Calculator",
+    "slug": "tank-chill-calc",
+    "publishedSlug": "2026-04-20-tank-chill-calc",
+    "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-20-tank-chill-calc/"
   },
   "apps": [
+    {
+      "date": "2026-04-20",
+      "title": "Tank Chill Calculator",
+      "slug": "tank-chill-calc",
+      "publishedSlug": "2026-04-20-tank-chill-calc",
+      "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-20-tank-chill-calc/"
+    },
     {
       "date": "2026-04-19",
       "title": "Root Zone Explorer",
