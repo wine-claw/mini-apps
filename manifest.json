@@ -2,16 +2,23 @@
   "publicBase": "https://wine-claw.github.io/mini-apps",
   "latestUrl": "https://wine-claw.github.io/mini-apps/latest/",
   "latest": {
-    "date": "2026-04-20",
-    "title": "Tank Chill Calculator",
-    "slug": "tank-chill-calc",
-    "publishedSlug": "2026-04-20-tank-chill-calc",
-    "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-20-tank-chill-calc/"
+    "date": "2026-04-21",
+    "title": "Vineyard Pest Detective",
+    "slug": "pest-detective",
+    "publishedSlug": "2026-04-21-pest-detective",
+    "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-21-pest-detective/"
   },
   "apps": [
     {
+      "date": "2026-04-21",
+      "title": "Vineyard Pest Detective",
+      "slug": "pest-detective",
+      "publishedSlug": "2026-04-21-pest-detective",
+      "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-21-pest-detective/"
+    },
+    {
       "date": "2026-04-20",
-      "title": "Tank Chill Calculator",
+      "title": "Tank Chill Calc",
       "slug": "tank-chill-calc",
       "publishedSlug": "2026-04-20-tank-chill-calc",
       "url": "https://wine-claw.github.io/mini-apps/apps/2026-04-20-tank-chill-calc/"
