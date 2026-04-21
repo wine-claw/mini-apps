@@ -10,6 +10,15 @@
   },
   "apps": [
     {
+      "title": "O₂ Risk Map — Winery Oxygen Risk Explorer",
+      "slug": "2026-04-22-o2-risk-map",
+      "date": "2026-04-22",
+      "archetype": "Mapping / spatial explorer",
+      "description": "Interactive winery process map showing where oxygen enters from receival to bottling, with risk levels, DO pickup, mitigation strategies, and AWRI TPO guidelines.",
+      "path": "apps/2026-04-22-o2-risk-map/index.html",
+      "heroImage": "apps/2026-04-22-o2-risk-map/hero.png"
+    },
+    {
       "date": "2026-04-21",
       "title": "Vineyard Pest Detective",
       "slug": "pest-detective",
